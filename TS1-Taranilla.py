@@ -20,21 +20,6 @@ def mi_funcion_sen( ax = 1, dc = 0, fx = 1, ph = 0, nn = 1000, fs = 1000):
     
     return tt, xx
 
-# Item 1: Una señal sinusoidal de 2KHz
-tt, x1 = mi_funcion_sen(fx = 2000, nn = 1000, fs = 40000)
-
-# Item 2: Misma señal amplificada y desfazada en π/2
-tt, x2 = mi_funcion_sen(ax=2, fx = 2000, ph = np.pi/2, nn = 1000, fs = 40000)
-
-# Item 3: Misma señal modulada en amplitud por otra señal sinusoidal de la mitad de la frecuencia.
-tt, xaux = mi_funcion_sen(fx = 1000, nn = 1000, fs = 40000)
-x3 = x1 * xaux
-
-# Item 4: Señal anterior recortada al 75% de su potencia.
-a4 = 1*0.75 #reduzco la amplitud en un 75%
-x4 = np.clip(x1, -a4, a4)
-
-# Item 5: Una señal cuadrada de 4KHz.
 def mi_funcion_cuadrada ( ax = 1, dc = 0, fx = 1, ph = 0, nn = 1000, fs = 1000):
     Ts = 1/fs #tiempo de muestreo
     T_simulacion = nn * Ts # segundos
@@ -44,15 +29,62 @@ def mi_funcion_cuadrada ( ax = 1, dc = 0, fx = 1, ph = 0, nn = 1000, fs = 1000):
     
     return tc, xc
 
-tc, x5 = mi_funcion_cuadrada (fx = 2000, nn = 1000, fs = 40000)
+def energia (xx):
+    E=0
+    long = len(xx)
+    for k in range(long):
+        E = E + (xx[k])**2
+    return E
+
+#Para cada Item utilicé misma cantidad de muestras y tiempo de muestreo
+fs = 40000
+Ts = 1/fs
+N = 1000
+T_simulacion = N/fs
+
+# Item 1: Una señal sinusoidal de 2KHz
+tt, x1 = mi_funcion_sen(fx = 2000, nn = N, fs = fs)
+potx1 = np.mean(x1**2)
+
+print(f'La potencia para la sinusoidal de 2KHz es de {potx1} W')
+
+# Item 2: Misma señal amplificada y desfazada en π/2
+tt, x2 = mi_funcion_sen(ax=2, fx = 2000, ph = np.pi/2, nn = N, fs = fs)
+potx2 = np.mean(x2**2)
+
+print(f'La potencia para la sinusoidal de 2KHz, Amplitud 2 y fase π/2 es de {potx2} W')
+
+# Item 3: Misma señal modulada en amplitud por otra señal sinusoidal de la mitad de la frecuencia.
+tt, xaux = mi_funcion_sen(fx = 1000, nn = N, fs = fs)
+x3 = x1 * xaux
+potx3 = np.mean(x3**2)
+
+print(f'La potencia para la señal modulada es de {potx3} W')
+
+# Item 4: Señal anterior recortada al 75% de su potencia.
+a4 = 1*0.75 #reduzco la amplitud en un 75%
+x4 = np.clip(x1, -a4, a4)
+potx4 = np.mean(x4**2)
+
+print(f'La potencia para la señal clippeada es de {potx4} W')
+
+# Item 5: Una señal cuadrada de 4KHz.
+tc, x5 = mi_funcion_cuadrada (fx = 4000, nn = N, fs = fs)
+potx5 = np.mean(x5**2)
+
+print(f'La potencia para la señal cuadrada de 4KHz es de {potx5} W')
 
 # Item 6: Un pulso rectangular de 10ms.
-tp=np.arange(0,0.025,0.001)
+tp=np.arange(0,T_simulacion,Ts)
 
 x6=np.zeros(1000)
 x6[400:800]=1
 
-#En cada caso indique tiempo entre muestras, número de muestras y potencia.
+enx6 = energia(x6)
+
+print(f'La energia para el pulso rectangular es de {enx6} J')
+
+#En cada caso indique tiempo entre muestras, número de muestras y potencia o energía según corresponda.
 
 # Graficos de Punto 1
 plt.figure(1)
@@ -65,7 +97,7 @@ plt.ylabel('Amplitud [Volts]')
 
 plt.figure(2)
 plt.plot(tt, x2, color='magenta')
-plt.title('Sinusoidal de 2kHz, Amplitud 2 y desfasada en pi/2')
+plt.title('Sinusoidal de 2kHz, Amplitud 2 y desfasada en π/2')
 plt.grid(True)
 plt.legend()
 plt.xlabel('tiempo [segundos]')
@@ -91,7 +123,7 @@ plt.ylabel('Amplitud [Volts]')
 
 plt.figure(5)
 plt.plot(tt, x5, color='grey')
-plt.title('Cuadrada de 2kHz')
+plt.title('Cuadrada de 4kHz')
 plt.grid(True)
 plt.legend()
 plt.xlabel('tiempo [segundos]')
@@ -123,8 +155,7 @@ print(f'{prodx1x2},{prodx1x3},{prodx1x4},{prodx1x5},{prodx1x6}')
 #Para calcular la correlación utilizo la funcion de scipy
 def correlacion (v1, v2):
     rv1v2 = sign.correlate(v1,v2)
-    long = len(rv1v2)
-    eje_rv1v2 = np.arange (long)
+    eje_rv1v2 = np.arange(-(N), N-1)
     return rv1v2, eje_rv1v2
 
 rx1x1, eje_correlx1 = correlacion(x1,x1)
@@ -139,7 +170,6 @@ plt.figure(7)
 plt.plot(eje_correlx1, rx1x1, color='red')
 plt.title('Autocorrelación de Sinusoidal de 2KHz')
 plt.grid(True)
-plt.legend()
 plt.xlabel('Retardo k')
 plt.ylabel('Valor de Correlación')
 
@@ -147,7 +177,6 @@ plt.figure(8)
 plt.plot(eje_correlx2, rx1x2, color='magenta')
 plt.title('Correlación de Sinusoidal de 2KHz con otra de 2KHz, doble de amplitud y desfasada en pi/2')
 plt.grid(True)
-plt.legend()
 plt.xlabel('Retardo k')
 plt.ylabel('Valor de Correlación')
 
@@ -155,7 +184,6 @@ plt.figure(9)
 plt.plot(eje_correlx3, rx1x3, color='green')
 plt.title('Correlación de Sinusoidal de 2KHz con la señal modulada')
 plt.grid(True)
-plt.legend()
 plt.xlabel('Retardo k')
 plt.ylabel('Valor de Correlación')
 
@@ -163,7 +191,6 @@ plt.figure(10)
 plt.plot(eje_correlx4, rx1x4, color='blue')
 plt.title('Correlación de Sinusoidal de 2KHz con la señal clippeada')
 plt.grid(True)
-plt.legend()
 plt.xlabel('Retardo k')
 plt.ylabel('Valor de Correlación')
 
@@ -171,7 +198,6 @@ plt.figure(11)
 plt.plot(eje_correlx5, rx1x5, color='grey')
 plt.title('Correlación de Sinusoidal de 2KHz con la señal cuadrada')
 plt.grid(True)
-plt.legend()
 plt.xlabel('Retardo k')
 plt.ylabel('Valor de Correlación')
 
@@ -179,9 +205,10 @@ plt.figure(12)
 plt.plot(eje_correlx6, rx1x6, color='red')
 plt.title('Correlación de Sinusoidal de 2KHz con el pulso')
 plt.grid(True)
-plt.legend()
 plt.xlabel('Retardo k')
 plt.ylabel('Valor de Correlación')
+
+plt.show()
 
 #%% Punto 4: Mostrar que la igualdad se cumple con señales sinosoidales, considerando α=ω⋅t, el doble de β (Use la frecuencia que desee)
 #Voy a utilizar las sinusoidales realizadas anteriormente: x1 y xaux, que son iguales pero una tiene frecuencia 2KHz y la otra 1KHz
