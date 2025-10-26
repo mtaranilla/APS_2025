@@ -8,8 +8,6 @@ Created on Fri Oct 24 17:42:27 2025
 import numpy as np
 import scipy.signal as sig
 import matplotlib.pyplot as plt
-from scipy import signal 
-
 
 #%% Polos y Ceros de Redes (punto 4)
 ## a
