@@ -82,3 +82,193 @@ plt.xlabel('σ [rad/s]')
 plt.ylabel('jω [rad/s]')
 plt.legend()
 plt.grid(True)
+
+# %% Cálculo y gráfico de modulo y fase, indicando respuesta asintótica donde corresponda
+
+# T1(s)
+
+# Coeficientes
+b, a = sig.zpk2tf(z_a, p_a, k_a)
+
+w = np.logspace(-1, 2, 1000)
+
+# Respuesta en frecuencia
+w, h = sig.freqs(b, a, w)
+
+fase = np.unwrap(np.angle(h))
+
+plt.figure(figsize=(12,5))
+
+# Magnitud
+plt.subplot(1,2,1)
+plt.semilogx(w, 20*np.log10(np.abs(h)))
+plt.title('T1(s) - Respuesta en Magnitud')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('|H(jω)| [dB]')# T1(s)
+
+# Coeficientes
+b, a = sig.zpk2tf(z_a, p_a, k_a)
+
+w = np.logspace(-1, 2, 1000)
+
+# Respuesta en frecuencia
+w, h = sig.freqs(b, a, w)
+
+fase = np.unwrap(np.angle(h))
+
+plt.figure(figsize=(12,5))
+
+# Magnitud
+plt.subplot(1,2,1)
+plt.semilogx(w, 20*np.log10(np.abs(h)))
+plt.title('T1(s) - Respuesta en Magnitud')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('|H(jω)| [dB]')
+plt.grid(True, which='both', alpha=0.5)
+
+# Fase
+plt.subplot(1,2,2)
+plt.semilogx(w, (fase / np.pi))
+plt.title('T1(s) - Respuesta en Fase')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('Fase [rad]')
+plt.grid(True, which='both', alpha=0.5)
+plt.grid(True, which='both', alpha=0.5)
+
+
+# T2(s)
+
+b, a = sig.zpk2tf(z_b, p_b, k_b)
+w, h = sig.freqs(b, a, w)
+fase = np.unwrap(np.angle(h))
+
+plt.figure(figsize=(12,5))
+
+plt.subplot(1,2,1)
+plt.semilogx(w, 20*np.log10(np.abs(h)))
+plt.title('T2(s) - Respuesta en Magnitud')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('|H(jω)| [dB]')
+plt.grid(True, which='both', alpha=0.5)
+
+plt.subplot(1,2,2)
+plt.semilogx(w, (fase / np.pi))
+plt.title('T2(s) - Respuesta en Fase')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('Fase [rad]')
+plt.grid(True, which='both', alpha=0.5)
+
+
+#T3(s)
+
+b, a = sig.zpk2tf(z_c, p_c, k_c)
+w, h = sig.freqs(b, a, w)
+fase = np.unwrap(np.angle(h))
+
+plt.figure(figsize=(12,5))
+
+plt.subplot(1,2,1)
+plt.semilogx(w, 20*np.log10(np.abs(h)))
+plt.title('T3(s) - Respuesta en Magnitud')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('|H(jω)| [dB]')
+plt.grid(True, which='both', alpha=0.5)
+
+plt.subplot(1,2,2)
+plt.semilogx(w, (fase / np.pi))
+plt.title('T3(s) - Respuesta en Fase')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('Fase [rad]')
+plt.grid(True, which='both', alpha=0.5)
+
+
+
+# %% Cálculo y gráfico de modulo y fase, normalizados a 0dB
+
+# T1(s) 
+
+# Coeficientes
+b, a = sig.zpk2tf(z_a, p_a, k_a)
+
+# Vector de frecuencias 
+w = np.logspace(-1, 2, 1000)
+
+# Respuesta en frecuencia
+w, h = sig.freqs(b, a, w)
+fase = np.unwrap(np.angle(h))
+
+plt.figure(figsize=(12,5))
+
+# Magnitud T1
+plt.subplot(1,2,1)
+mag_db = 20*np.log10(np.abs(h))
+max_mag_db = np.max(mag_db)
+plt.semilogx(w, mag_db - max_mag_db)
+plt.title('T1(s) - Respuesta en Magnitud')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('|H(jω)| [dB]')
+plt.grid(True, which='both', alpha=0.5)
+
+# Fase T1
+plt.subplot(1,2,2)
+plt.semilogx(w, fase) 
+plt.title('T1(s) - Respuesta en Fase')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('Fase [rad]') 
+plt.grid(True, which='both', alpha=0.5)
+
+
+# T2(s) 
+
+b, a = sig.zpk2tf(z_b, p_b, k_b)
+w, h = sig.freqs(b, a, w)
+fase = np.unwrap(np.angle(h))
+
+plt.figure(figsize=(12,5))
+
+# Magnitud T2
+plt.subplot(1,2,1)
+mag_db = 20*np.log10(np.abs(h))
+max_mag_db = np.max(mag_db)
+plt.semilogx(w, mag_db - max_mag_db)
+plt.title('T2(s) - Respuesta en Magnitud ')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('|H(jω)| [dB]')
+plt.grid(True, which='both', alpha=0.5)
+
+# Fase T2
+plt.subplot(1,2,2)
+plt.semilogx(w, fase)
+plt.title('T2(s) - Respuesta en Fase')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('Fase [rad]')
+plt.grid(True, which='both', alpha=0.5)
+
+
+# T3(s)
+
+b, a = sig.zpk2tf(z_c, p_c, k_c)
+w, h = sig.freqs(b, a, w)
+fase = np.unwrap(np.angle(h))
+
+plt.figure(figsize=(12,5))
+
+# Magnitud T3
+plt.subplot(1,2,1)
+mag_db = 20*np.log10(np.abs(h))
+max_mag_db = np.max(mag_db)
+plt.semilogx(w, mag_db - max_mag_db)
+plt.title('T3(s) - Respuesta en Magnitud ')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('|H(jω)| [dB]')
+plt.grid(True, which='both', alpha=0.5)
+
+# Fase T3
+plt.subplot(1,2,2)
+plt.semilogx(w, fase)
+plt.title('T3(s) - Respuesta en Fase')
+plt.xlabel('Pulsación angular [rad/s]')
+plt.ylabel('Fase [rad]')
+plt.grid(True, which='both', alpha=0.5)
+
+
