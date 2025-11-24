@@ -32,9 +32,6 @@ def plantilla(ws,wp,fs,ripp,att):
     y_3_arriba = np.array([100,100])
 
     #Gráfico
-    plt.figure()
-    plt.title('Plantilla de Diseño')
-
     plt.plot(frec_1, y_1_abajo, color='black')
     plt.plot([ws[0],ws[0]], [-atenuacion,100], color='black')
     plt.fill_between(frec_1, y_1_arriba ,y_1_abajo, color='lightblue', alpha=0.5)
