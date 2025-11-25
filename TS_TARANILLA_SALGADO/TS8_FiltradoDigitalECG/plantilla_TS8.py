@@ -48,7 +48,6 @@ def plantilla(ws,wp,fs,ripp,att):
     plt.grid(True)
     plt.xlabel('Frecuencia [Hz]')
     plt.ylabel('Magnitud [dB]')
-    plt.show()
     return 
 
 #%%
