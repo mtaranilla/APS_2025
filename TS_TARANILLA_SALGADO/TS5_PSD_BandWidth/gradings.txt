@@ -1,20 +1,31 @@
 Informe:
-    Edición: Pasar el Jupyter Notebook por un corrector-. Por ejemplo, donde dice por ultimo debió decir por último.
-    Conclusión: La conclusión necesita más trabajo, hay que contar un poco cómo les fue con el método que empleaste 
+    Edición:
+        **************** CORREGIR******************************************************************************* 
+        *Pasar el Jupyter Notebook por un corrector-. Por ejemplo, donde dice por ultimo debió decir por último.
+        ********************************************************************************************************
+    
+    
+    Conclusión: 
+        ***************** No hubo cambios en la conclusión***********************************
+    La conclusión necesita más trabajo, hay que contar un poco cómo les fue con el método que empleaste 
     para la estimación de los espectros y las ventanas que usaste para las tres señales que consideramos. Hablando 
     de la varianza y la resolución espectral.
 
-Código: El código en el Jupyter Notebook no corre como corresponde, tira un error en:
-    ppg = np.load('ppg_sin_ruido.npy')
-    Error: [Errno 2] No such file or directory: 'ppg_sin_ruido.npy'    
+Código: 
+    * Corre sin problemas, pero agregar un archivo de requirements porque tuve que instalar muchos módulos de python,
+      módulos que habría que evaluar si son esenciales: pip freeze > requirements.txt.
+      Además genera el siguiente Warning:  
+      LightkurveDeprecationWarning: The search_lightcurvefile function is deprecated and may be removed in a future version.
+      Use search_lightcurve() instead.
+      LightkurveDeprecationWarning: The PDCSAP_FLUX function is deprecated and may be removed in a future version.
+      lc = lc_file.PDCSAP_FLUX.remove_nans()
 
 Desarrollo:
     Hay que publicar el trabajo en el nbviewer, mostrame el error generando un Issue en el repositorio en GitHub.
-    En líneas generales el trabajo está bien desarrollado. Falta trabajar en lo siguiente: 
-    * Justificar mejor por qué Welch para todas las señales, por qué no Blackman-Tukey
+    * Lo siguiente no es del todo cierto: "...en este trabajo se trata con señales no estacionarias." Especialmente para 
+      señales ECG y PPG.
+    * Tendrían que haber probado los otros métodos, no está justificado el sólo uso de Welch.
     * En el caso de las señales de audio, exponer los anchos de banda, no los límites.
-    * Falta hablar más sobre las varianzas en las estimaciones, en el mejor de los casos hacer algún cálculo para 
-      tener una idea del valor.
     * La señal PPG es mejor graficarla en un rango temporal menor.
     
 Sugerencias:
